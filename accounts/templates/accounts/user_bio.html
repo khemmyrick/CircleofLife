@@ -1,8 +1,10 @@
 {% extends 'layout.html' %}
+{% load static from staticfiles %}
+
 {% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
 {% block body %}
 	<div>
-		<img src="{{ account.avatar }}" alt="{{ account.username }}'s picture.">
+		<img src="{{ static 'media/' }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
 		<table>
 			<tr>
 				<td>Full Name:</td>
