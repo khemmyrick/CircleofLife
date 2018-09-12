@@ -1,0 +1,66 @@
+/* local.css */
+
+@import 'global.css';
+
+
+header {
+	background-color: #4078A8;
+}
+
+body {
+	color: #A0D8F0;
+	background-color: #285080;
+}
+
+label {
+	color: #A0D8F0;
+	text-align: center;
+}
+
+
+textarea {
+	color: #101010;
+}
+
+input {
+	color: #101010;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+	color: #A0D8F0;	
+}
+
+a, a:hover, a:active, a:visited {
+	color: #A0D8F0;
+}
+
+div {
+	color: #A0D8F0;
+	background-image: linear-gradient(to right, #203848, #305070, #203848);
+	border: 2px solid #203848;
+	border-radius: 50px;
+}
+
+li {
+
+}
+
+table {
+	width: 100%;
+	background-image: linear-gradient(to right, transparent, #203848, transparent);
+	border: 2px solid #203848;
+	border-radius: 50px;
+}
+
+.bounds {
+	border: 5px solid #101010;
+	border-radius: 25px;
+}
+
+
+.circle--header {
+	background-color: #4078A8;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}

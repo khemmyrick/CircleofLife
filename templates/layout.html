@@ -21,7 +21,7 @@
 
     <!-- CSS
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="stylesheet" href="{% static "css/global.css" %}">
+    <link rel="stylesheet" href="{% static "css/local.css" %}">
 
     <!-- JS
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -45,8 +45,8 @@
             <div class="circle--fluid--cell circle--fluid--primary">
                 <nav>
                     <ul class="circle--inline">
-                        <li><a href="#">nav</a></li>
-                        <li><a href="#">here?</a></li>
+                        <li><a href="#" class="button">nav</a></li>
+                        <li><a href="{% url 'accounts:list' %}" class="button">User List!</a></li>
                     </ul>
                 </nav>
             </div>
@@ -54,13 +54,13 @@
                 <nav>
                     <ul class="circle--inline">
                         {% if not user.is_authenticated %}
-                            <li><a href="{% url 'accounts:sign_up' %}">Sign Up</a></li>
-                            <li><a href="{% url 'accounts:sign_in' %}">Sign
+                            <li><a href="{% url 'accounts:sign_up' %}" class="button">Sign Up</a></li>
+                            <li><a href="{% url 'accounts:sign_in' %}" class="button">Sign
                                 In</a></li>
                         {% else %}
                             <!-- view profile link here? -->
                             <!-- edit profile link here? -->
-                            <li><a href="{% url 'accounts:sign_out' %}">Sign Out</a></li>
+                            <li><a href="{% url 'accounts:sign_out' %}" class="button">Sign Out</a></li>
                         {% endif %}
                     </ul>
                 </nav>

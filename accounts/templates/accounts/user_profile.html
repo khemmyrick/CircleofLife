@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
+{% block body %}
+	<div>
+		<img src="#" alt="{{ account.username }}'s picture.">
+		<ul>
+			<li>{{ account.username }}</li>
+			<li>{{ account.first_name }} {{ account.last_name }}</li>
+			<li><a href="{% url 'accounts:bio' pk=account.pk %}">Click for more information on {{ account.username }}.</a></li>
+		</ul>
+		<!-- if block to authenticate this user as user in question -->
+		<a href="{% url 'accounts:edit' pk=account.pk %}">Edit your account.</a>
+		<!-- Create a “profile” view to display a user profile with the following fields: First Name, Last Name, Email, Date of Birth, Bio and Avatar. Include a link to edit the profile. -->
+	</div>
+
+{% endblock %}

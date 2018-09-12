@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+
+from django.conf import settings
+from django.views.static import serve
+
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from . import views
@@ -25,3 +29,10 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
 ]
 urlpatterns += staticfiles_urlpatterns()
+
+if settings.DEBUG:
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        })
+    ]
