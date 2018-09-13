@@ -5,11 +5,11 @@
     <div class="row">
         {%  for account in accounts %}
             <div class="small-6 columns">
-                <div class="callout">
-                    <h5 align="center"><a href="{% url 'accounts:profile' pk=account.pk %}" class="button">{{ account.username }}</a></h5>
+                <div class="callout" align="center">
+                    <a href="{% url 'accounts:profile' pk=account.pk %}" class="button"><h5 align="center">{{ account.username }}</h5>
                     <div class="card-copy" style="text-align: center;">
-                        {{ account.email }}
-                    </div>
+                        <img src="{{ MEDIA_URL }}/{{ account.avatar }}" alt="{{ account.username }}">
+                    </div></a>
                 </div>
             </div>
 		{% endfor %}

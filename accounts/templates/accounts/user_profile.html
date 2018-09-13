@@ -2,7 +2,7 @@
 {% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
 {% block body %}
 	<div>
-		<img src="#" alt="{{ account.username }}'s picture.">
+		<img src="{{ MEDIA_URL }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
 		<ul>
 			<li>{{ account.username }}</li>
 			<li>{{ account.first_name }} {{ account.last_name }}</li>

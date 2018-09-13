@@ -51,7 +51,7 @@ def sign_up(request):
                 request,
                 "You're now a user! You've been signed in, too."
             )
-            return HttpResponseRedirect(reverse('accounts:list'))  # TODO: go to profile
+            return HttpResponseRedirect(reverse('accounts:list'))  # TODO: go to profile?
     return render(request, 'accounts/sign_up.html', {'form': form})
 
 

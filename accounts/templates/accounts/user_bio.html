@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
-{% load static from staticfiles %}
+
 
 {% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
 {% block body %}
 	<div>
-		<img src="{{ static 'media/' }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
+		<img class="biopic" src="{{ MEDIA_URL }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
 		<table>
 			<tr>
 				<td>Full Name:</td>
@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>Age:</td>
-				<td>{{ account.birthdate }}</td><!-- use filter for age -->
+				<td>{{ account.birth_date }}</td><!-- use filter for age -->
 			</tr>
 			<tr>
 				<td>Biography:</td>

@@ -41,10 +41,16 @@ div {
 	border: 2px solid #203848;
 	border-radius: 50px;
 }
-
-li {
-
+/*
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+	border: 2px solid #203848;
+	border-radius: 50%;
 }
+*/
 
 table {
 	width: 100%;
@@ -63,4 +69,12 @@ table {
 	background-color: #4078A8;
     padding: 20px 0;
     margin-bottom: 30px;
+}
+
+.biopic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	border: 2px solid #203848;
+	border-radius: 15%;
 }
