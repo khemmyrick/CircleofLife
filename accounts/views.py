@@ -39,7 +39,7 @@ def sign_up(request):
     form = forms.AccountCreationForm()
     if request.method == 'POST':
         # form = UserCreationForm(data=request.POST)
-        form = forms.AccountCreationForm(data=request.POST)
+        form = forms.AccountCreationForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             user = authenticate(
@@ -83,24 +83,26 @@ def profile_list(request):
 @login_required
 def profile_edit(request, pk):
     account = get_object_or_404(models.Account, pk=pk)
-    form = forms.AccountCreationForm(instance=account)
+    form = forms.AccountEditForm(instance=account)
 
     if request.method == 'POST':
-        form = forms.AccountCreationForm(instance=account, data=request.POST)
+        form = forms.AccountEditForm(instance=account,
+                                     data=request.POST,
+                                     files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request,
                              "Updated {}".format(
                                 form.cleaned_data['username'])
             )
-            return HttpResponseRedirect(reverse('list'))
+            return HttpResponseRedirect(reverse('accounts:list'))
     return render(request, 'accounts/user_form.html',
                   {'form': form, 'account': account})
 
 
 @login_required
 def pw_edit(request, pk):
-    user = get_object_or_404(models.User, pk=pk)
+    user = get_object_or_404(models.Account, pk=pk)
     form = forms.PasswordForm(instance=user)
 
     if request.method == 'POST':

@@ -1,17 +1,16 @@
-Steps completed:
+# Steps completed:
 
-Basic webapp runs with no errors.
+1. Basic webapp runs with no errors.
+2. Validators check for bio length and password complexity.
+3. Custom CSS implemented.
 
-Next:
-1. Create forms module.
-2. Create test users? In tests.py?
-3. Upload to github after forms module is working.
+# Next:
+1. Upload to github for feedback and advice.
+2. Create edit profile and change password routes.
+2. pload to github after forms module is working.
 
-User Profile with Django
-Supposed to take: 9 hours!!!!!!!!! HAHAHAHAHAHAHAH!!!
-
-1. Use the supplied HTML/CSS to build and style the profile page and bio page.[]
-<!-- step →
+User Profile with Django\
+1. Use the supplied HTML/CSS to build and style the profile page and bio page.
 
 2. Create a Django model for the user profile.[X]
 
