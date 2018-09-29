@@ -2,7 +2,8 @@ import re
 
 from django import forms
 from django.core import validators
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
+                                       PasswordChangeForm)
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -129,3 +130,50 @@ class AccountEditForm(AccountCreationForm):
                 code='email_mismatch',
             )
         return email2
+
+
+class PasswordEditForm(PasswordChangeForm):
+    error_messages = {
+        'password_mismatch': _("New password confirmation doesn't match."),
+        'weak_pw': _("New password too weak."),
+        'triplets': _("New password same as old password.")
+    }
+    def weak_password(self):
+        raise forms.ValidationError(
+            self.error_messages['weak_pw'],
+            code='weak_pw',
+        )
+
+    def pw_triplets(self):
+        raise forms.ValidationError(
+            self.error_messages['triplets'],
+            code='triplets'
+        )
+
+    def clean_new_password1(self):
+        new_password1 = self.cleaned_data.get("new_password1")
+        old_password = self.cleaned_data.get("old_password")
+        # if password1.isalpha() or password1.isdigit():
+        #    weak_password()
+        if not re.search(r'[_\W]+', new_password1):
+            self.weak_password()
+        if not re.search(r'\d+', new_password1):
+            self.weak_password()
+        if not re.search(r'[a-z]', new_password1):
+            self.weak_password()
+        if not re.search(r'[A-Z]', new_password1):
+            self.weak_password()
+        if new_password1 == old_password:
+            self.pw_triplets()
+
+        return password1
+
+    def clean_new_password2(self):
+        new_password1 = self.cleaned_data.get("new_password1")
+        new_password2 = self.cleaned_data.get("new_password2")
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+        return new_password2
