@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import (authenticate, login, logout,
+                                 update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
+                                       PasswordChangeForm)
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from . import forms, models
 
@@ -103,16 +105,31 @@ def profile_edit(request, pk):
 @login_required
 def pw_edit(request, pk):
     user = get_object_or_404(models.Account, pk=pk)
-    form = forms.PasswordForm(instance=user)
-
     if request.method == 'POST':
-        form = forms.PasswordForm(instance=user, data=request.POST)
+        form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request,
-                             "Updated {}'s password!".format(
-                                form.cleaned_data['username'])
-            )
-            return HttpResponseRedirect(user.get_absolute_url())
-    return render(request, 'accounts/user_form.html',
-                  {'form': form, 'user': user})
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('pw_edit')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/new_password.html', {
+        'form': form
+    })
+#    user = get_object_or_404(models.Account, pk=pk)
+#    form = forms.PasswordForm(instance=user)
+#
+#    if request.method == 'POST':
+#        form = forms.PasswordForm(instance=user, data=request.POST)
+#        if form.is_valid():
+#            form.save()
+#            messages.success(request,
+#                             "Updated {}'s password!".format(
+#                                form.cleaned_data['username'])
+#            )
+#            return HttpResponseRedirect(user.get_absolute_url())
+#    return render(request, 'accounts/new_password.html',
+#                  {'form': form, 'user': user})

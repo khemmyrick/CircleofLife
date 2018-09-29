@@ -60,6 +60,8 @@
                         {% else %}
                             <!-- view profile link here? -->
                             <!-- edit profile link here? -->
+							<li><a href="{% url 'accounts:edit' pk=user.pk %}" class="button">Edit Profile</a></li> <!-- put something like 'accounts:edit' pk=account.pk -->
+							<li><a href="{% url 'accounts:pw_edit' pk=user.pk %}" class="button">Change Password</a><li><!-- something like 'accounts:pw_edit' pk=account.pk -->
                             <li><a href="{% url 'accounts:sign_out' %}" class="button">Sign Out</a></li>
                         {% endif %}
                     </ul>

@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^$', views.home, name='home')
+    # url(r'^(?P<pk>\d+)$', views.index, name='index')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
 
