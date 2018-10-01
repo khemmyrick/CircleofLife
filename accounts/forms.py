@@ -21,7 +21,9 @@ class AccountCreationForm(UserCreationForm):
         'no_num': _("Password must contain a numerical digit."),
         'symbols': _("Password must contain a non-alphanumeric symbol."),
         'password_mismatch': _("The two password fields didn't match."),
-        'bio_short': _("Bio must contain at least 10 characters.")
+        'pw_short': _("Password must contain at least 14 characters."),
+        'bio_short': _("Bio must contain at least 10 characters."),
+        'email_mismatch': _("The two email fields didn't match.")
     }
     bio = forms.CharField(label=("User Bio"),
         widget=forms.Textarea)
@@ -36,14 +38,26 @@ class AccountCreationForm(UserCreationForm):
 
     class Meta:
         model = models.Account
-        fields = ("username", "email", "first_name", "last_name",
-                  "birth_date", "country", "website", "avatar")
+        fields = ("username", "email", "email2", "first_name", "last_name",
+                  "birth_date", "country", "website", "avatar", "bio",
+                  "password1", "password2")
 
     def weak_password(self, flaw):
         raise forms.ValidationError(
             self.error_messages[flaw],
             code=flaw,
         )
+        
+    def clean_email2(self):
+        email1 = self.cleaned_data.get("email")
+        email2 = self.cleaned_data.get("email2")
+        if email1 and email2 and email1 != email2:
+            raise forms.ValidationError(
+                self.error_messages['email_mismatch'],
+                code='email_mismatch',
+            )
+        print('*** EMAIL 2 CHECKED ***')
+        return email2
 
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
@@ -57,7 +71,8 @@ class AccountCreationForm(UserCreationForm):
             self.weak_password('lc_letters')
         if not re.search(r'[A-Z]', password1):
             self.weak_password('uc_letters')
-
+        if len(password1) < 14:
+            self.weak_password('pw_short')
         return password1
 
     def clean_password2(self):
@@ -89,6 +104,11 @@ class AccountCreationForm(UserCreationForm):
 
 
 class AccountEditForm(AccountCreationForm):
+    """
+    Form for editing accounts.
+    Extends AccountCreationForm.
+    (I'm not 100% sure how that impacts inherited fields)
+    """
     error_messages = {
         'email_mismatch': _("The two email fields didn't match.")
     }
@@ -124,7 +144,8 @@ class PasswordEditForm(PasswordChangeForm):
         'no_num': _("Password must contain a numerical digit."),
         'triplets': _("New password same as old password."),
         'symbols': _("Password must contain a non-alphanumeric symbol."),
-        'password_incorrect': _("The original password is incorrect.")
+        'password_incorrect': _("The original password is incorrect."),
+        'pw_short': _("Password must contain at least 14 characters."),
     }
 
     def weak_password(self, flaw):
@@ -155,6 +176,8 @@ class PasswordEditForm(PasswordChangeForm):
         if new_password1 == old_password:
             print('**** NEW BOSS IS OLD BOSS ****')
             self.weak_password('triplets')
+        if len(new_password1) < 14:
+            self.weak_password('pw_short')
         print('*** PASSWORD 1 CHECKED ***')
         return new_password1
 

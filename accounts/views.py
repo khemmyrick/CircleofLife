@@ -37,10 +37,8 @@ def sign_in(request):
 
 
 def sign_up(request):
-    # form = UserCreationForm()
     form = forms.AccountCreationForm()
     if request.method == 'POST':
-        # form = UserCreationForm(data=request.POST)
         form = forms.AccountCreationForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
@@ -57,6 +55,7 @@ def sign_up(request):
     return render(request, 'accounts/sign_up.html', {'form': form})
 
 
+@login_required
 def sign_out(request):
     logout(request)
     messages.success(request, "You've been signed out. Come back soon!")
@@ -92,7 +91,8 @@ def profile_edit(request, pk):
                                      data=request.POST,
                                      files=request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
             messages.success(request,
                              "Updated {}".format(
                                 form.cleaned_data['username'])
@@ -121,17 +121,3 @@ def pw_edit(request, pk):
     return render(request, 'accounts/new_password.html', {
         'form': form
     })
-#    user = get_object_or_404(models.Account, pk=pk)
-#    form = forms.PasswordForm(instance=user)
-#
-#    if request.method == 'POST':
-#        form = forms.PasswordForm(instance=user, data=request.POST)
-#        if form.is_valid():
-#            form.save()
-#            messages.success(request,
-#                             "Updated {}'s password!".format(
-#                                form.cleaned_data['username'])
-#            )
-#            return HttpResponseRedirect(user.get_absolute_url())
-#    return render(request, 'accounts/new_password.html',
-#                  {'form': form, 'user': user})
