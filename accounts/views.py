@@ -106,8 +106,10 @@ def profile_edit(request, pk):
 def pw_edit(request, pk):
     user = get_object_or_404(models.Account, pk=pk)
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        print("*** REQUEST METHOD IS POST ***")
+        form = forms.PasswordEditForm(request.user, request.POST)
         if form.is_valid():
+            print("*** VIEW THINKS FORM IS VALID! ***")
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
