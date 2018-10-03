@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.core import validators
 from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
-                                       PasswordChangeForm)
+                                       PasswordChangeForm, UserChangeForm)
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -103,21 +103,38 @@ class AccountCreationForm(UserCreationForm):
         return account
 
 
-class AccountEditForm(AccountCreationForm):
+class AccountEditForm(UserChangeForm):
     """
     Form for editing accounts.
-    Extends AccountCreationForm.
-    (I'm not 100% sure how that impacts inherited fields)
+    Extends UserChangeForm.
+    NOTE: Does NOT extend my AccountCreationForm.
     """
     error_messages = {
-        'email_mismatch': _("The two email fields didn't match.")
+        'email_mismatch': _("The two email fields didn't match."),
+        'bio_short': _("Bio must contain at least 10 characters."),
+        'password_incorrect': _("The password is incorrect."),
     }
+
+    bio = forms.CharField(label=("User Bio"),
+        widget=forms.Textarea)
+    email = forms.CharField(label=_("Email"),
+        widget=forms.EmailInput)
+    email2 = forms.CharField(label=_("Email confirmation"),
+        widget=forms.EmailInput,
+        help_text=_("To confirm: enter the same email as above."))        
+    password = forms.CharField(label=_("Password"),
+        widget=forms.PasswordInput)
 
     class Meta:
         model = models.Account
         fields = ("username", "first_name", "last_name", "email",
-                  "email2", "birth_date", "bio", "avatar")
+                  "email2", "birth_date", "bio", "avatar", "password")
 
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        print('validating email')
+        return email
+                  
     def clean_email2(self):
         email1 = self.cleaned_data.get("email")
         email2 = self.cleaned_data.get("email2")
@@ -129,6 +146,26 @@ class AccountEditForm(AccountCreationForm):
         print('*** EMAIL 2 CHECKED ***')
         return email2
 
+    def clean_bio(self):
+        bio = self.cleaned_data.get("bio")
+        if len(bio) < 10:
+            raise forms.ValidationError(
+                self.error_messages['bio_short'],
+                code='bio_short',
+            )
+        return bio
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        return password
+
+    # def save(self, commit=True):
+    #    account = super(UserChangeForm, self).save(commit=False)
+    #    account.bio = self.cleaned_data["bio"]
+    #    account.email = self.cleaned_data["email"]
+    #    if commit:
+    #        account.save()
+    #    return account        
 
 class PasswordEditForm(PasswordChangeForm):
     """
@@ -191,3 +228,10 @@ class PasswordEditForm(PasswordChangeForm):
             )
         print('*** PASSWORD 2 CHECKED ***')
         return new_password2
+        
+    # def save(self, commit=True):
+    #    account = super(PasswordChangeForm, self).save(commit=False)
+    #    account.set_password(self.cleaned_data["new_password1"])
+    #    if commit:
+    #        account.save()
+    #    return account
