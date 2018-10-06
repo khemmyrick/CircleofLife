@@ -39,7 +39,7 @@ class AccountCreationForm(UserCreationForm):
     class Meta:
         model = models.Account
         fields = ("username", "email", "email2", "first_name", "last_name",
-                  "birth_date", "country", "website", "avatar", "bio",
+                  "birth_date", "avatar", "bio",
                   "password1", "password2")
 
     def weak_password(self, flaw):

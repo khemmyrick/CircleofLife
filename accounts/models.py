@@ -11,6 +11,4 @@ class Account(models.Model):
     bio = models.TextField()
     avatar = models.ImageField(blank=True, null=True,
                                upload_to=user_directory_path)
-    country = models.CharField(default=None, max_length=250)
-    website = models.URLField(default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
