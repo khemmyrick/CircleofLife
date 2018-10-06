@@ -10,4 +10,4 @@
 	- Do I need a different python file for validators?
 	- IGNORE EXTRA CREDIT OPTIONS.
 2. Verify strategy from PEERS on Slack.
-3. Avoid googling solutions individual obstacles without a cohesive strategy in place.
+3. Avoid googling solutions to individual obstacles without a cohesive endgame strategy in place.

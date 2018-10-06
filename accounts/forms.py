@@ -25,8 +25,8 @@ class AccountCreationForm(UserCreationForm):
         'bio_short': _("Bio must contain at least 10 characters."),
         'email_mismatch': _("The two email fields didn't match.")
     }
-    bio = forms.CharField(label=("User Bio"),
-        widget=forms.Textarea)
+    # bio = forms.CharField(label=("User Bio"),
+    #    widget=forms.Textarea)
     email2 = forms.CharField(label=_("Email confirmation"),
         widget=forms.EmailInput,
         help_text=_("To confirm: enter the same email as above."))        
@@ -37,9 +37,8 @@ class AccountCreationForm(UserCreationForm):
         help_text=_("Enter the same password as above, for verification."))
 
     class Meta:
-        model = models.Account
+        model = User
         fields = ("username", "email", "email2", "first_name", "last_name",
-                  "birth_date", "avatar", "bio",
                   "password1", "password2")
 
     def weak_password(self, flaw):
@@ -85,22 +84,22 @@ class AccountCreationForm(UserCreationForm):
             )
         return password2
         
-    def clean_bio(self):
-        bio = self.cleaned_data.get("bio")
-        if len(bio) < 10:
-            raise forms.ValidationError(
-                self.error_messages['bio_short'],
-                code='bio_short',
-            )
-        return bio
+    # def clean_bio(self):
+    #    bio = self.cleaned_data.get("bio")
+    #    if len(bio) < 10:
+    #        raise forms.ValidationError(
+    #            self.error_messages['bio_short'],
+    #            code='bio_short',
+    #        )
+    #    return bio
 
     def save(self, commit=True):
-        account = super(UserCreationForm, self).save(commit=False)
-        account.set_password(self.cleaned_data["password1"])
-        account.bio = self.cleaned_data["bio"]
+        user = super(UserCreationForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        # account.bio = self.cleaned_data["bio"]
         if commit:
-            account.save()
-        return account
+            user.save()
+        return user
 
 
 class AccountEditForm(UserChangeForm):
@@ -115,8 +114,8 @@ class AccountEditForm(UserChangeForm):
         'password_incorrect': _("The password is incorrect."),
     }
 
-    bio = forms.CharField(label=("User Bio"),
-        widget=forms.Textarea)
+    # bio = forms.CharField(label=("User Bio"),
+    #    widget=forms.Textarea)
     email = forms.CharField(label=_("Email"),
         widget=forms.EmailInput)
     email2 = forms.CharField(label=_("Email confirmation"),
@@ -126,9 +125,9 @@ class AccountEditForm(UserChangeForm):
         widget=forms.PasswordInput)
 
     class Meta:
-        model = models.Account
+        model = User
         fields = ("username", "first_name", "last_name", "email",
-                  "email2", "birth_date", "bio", "avatar", "password")
+                  "email2", "password")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
@@ -146,26 +145,19 @@ class AccountEditForm(UserChangeForm):
         print('*** EMAIL 2 CHECKED ***')
         return email2
 
-    def clean_bio(self):
-        bio = self.cleaned_data.get("bio")
-        if len(bio) < 10:
-            raise forms.ValidationError(
-                self.error_messages['bio_short'],
-                code='bio_short',
-            )
-        return bio
+    # def clean_bio(self):
+    #    bio = self.cleaned_data.get("bio")
+    #    if len(bio) < 10:
+    #        raise forms.ValidationError(
+    #            self.error_messages['bio_short'],
+    #            code='bio_short',
+    #        )
+    #    return bio
 
     def clean_password(self):
         password = self.cleaned_data.get("password")
         return password
 
-    # def save(self, commit=True):
-    #    account = super(UserChangeForm, self).save(commit=False)
-    #    account.bio = self.cleaned_data["bio"]
-    #    account.email = self.cleaned_data["email"]
-    #    if commit:
-    #        account.save()
-    #    return account        
 
 class PasswordEditForm(PasswordChangeForm):
     """
@@ -228,10 +220,3 @@ class PasswordEditForm(PasswordChangeForm):
             )
         print('*** PASSWORD 2 CHECKED ***')
         return new_password2
-        
-    # def save(self, commit=True):
-    #    account = super(PasswordChangeForm, self).save(commit=False)
-    #    account.set_password(self.cleaned_data["new_password1"])
-    #    if commit:
-    #        account.save()
-    #    return account
