@@ -4,6 +4,7 @@ from django.contrib.auth import (authenticate, login, logout,
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
                                        PasswordChangeForm)
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -63,27 +64,28 @@ def sign_out(request):
 
 
 def profile(request, pk):
-    account = get_object_or_404(models.Account, pk=pk)
+    account = get_object_or_404(User, pk=pk)
     return render(request, 'accounts/user_profile.html', {
             'account': account,
         })
 
 
 def profile_bio(request, pk):
-    account = get_object_or_404(models.Account, pk=pk)
+    account = get_object_or_404(User, pk=pk)
     return render(request, 'accounts/user_bio.html', {
             'account': account
         })
 
 
 def profile_list(request):
-    accounts = models.Account.objects.all()
+    # accounts = models.Account.objects.all()
+    accounts = User.objects.all()
     return render(request, 'accounts/user_list.html', {'accounts': accounts})
 
 
 @login_required
 def profile_edit(request, pk):
-    account = get_object_or_404(models.Account, pk=pk)
+    account = get_object_or_404(User, pk=pk)
     form = forms.AccountEditForm(instance=account)
 
     if request.method == 'POST':
@@ -104,7 +106,7 @@ def profile_edit(request, pk):
 
 @login_required
 def pw_edit(request, pk):
-    user = get_object_or_404(models.Account, pk=pk)
+    user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         print("*** REQUEST METHOD IS POST ***")
         form = forms.PasswordEditForm(request.user, request.POST)

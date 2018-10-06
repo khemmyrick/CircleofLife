@@ -184,7 +184,7 @@ class PasswordEditForm(PasswordChangeForm):
         )
 
     class Meta:
-        model = models.Account
+        model = User
         fields = ("old_password", "new_password1", "new_password2")
 
     def clean_new_password1(self):
