@@ -11,20 +11,15 @@ class Account(models.Model):
     bio = models.TextField()
     avatar = models.ImageField(blank=True, null=True,
                                upload_to=user_directory_path)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Use one-to-one field object?
-    ## Is the following Django docs example linking MySpecialUser to two different models,
-    ## Or is the user attribute supposed to represent the MySpecialUser instance itself?
-    ## Also, does AUTH_USER_MODEL need to be added to settings?  How does that work?
-    '''
-    class MySpecialUser(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Does the Django docs example link MySpecialUser to two different models,
+    # Or is the user attribute supposed to represent the MySpecialUser instance itself?
+    # AUTH_USER_MODEL is for replacing User model. Shouldn't need it here.
+    account = models.OneToOneField(
+        on_delete=models.CASCADE,
+    )
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
+        related_name='classic_user',
     )
-    supervisor = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='supervisor_of',
-    )
-    '''

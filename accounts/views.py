@@ -3,7 +3,7 @@ from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
-                                       PasswordChangeForm)
+                                       PasswordChangeForm, UserChangeForm)
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -90,8 +90,9 @@ def profile_edit(request, pk):
 
     if request.method == 'POST':
         form = forms.AccountEditForm(instance=account,
-                                     data=request.POST,
-                                     files=request.FILES)
+                              data=request.POST,
+                              files=request.FILES)
+
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
