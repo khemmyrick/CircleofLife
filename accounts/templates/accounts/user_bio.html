@@ -1,26 +1,26 @@
 {% extends 'layout.html' %}
 
 
-{% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
+{% block title %}{{ account.user.username }} | {{ block.super }}{% endblock %}
 {% block body %}
 	<div>
-		<img class="biopic" src="{{ MEDIA_URL }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
+		<img class="biopic" src="{{ MEDIA_URL }}{{ account.ava }}" alt="{{ account.user.username }}'s picture.">
 		<table>
 			<tr>
 				<td>Full Name:</td>
-				<td>{{ account.first_name }} {{ account.last_name }}</td>
+				<td>{{ account.user.first_name }} {{ account.user.last_name }}</td>
 			</tr>
 			<tr>
 				<td>Email:</td>
-				<td>{{ account.email }}</td>
+				<td>{{ account.user.email }}</td>
 			</tr>
 			<tr>
 				<td>Birthday:</td>
-				<td>{{ account.birth_date }}</td><!-- use filter -->
+				<td>{{ account.dob }}</td><!-- use filter -->
 			</tr>
 			<tr>
 				<td>Age:</td>
-				<td>{{ account.birth_date }}</td><!-- use filter for age -->
+				<td>{{ account.dob }}</td><!-- use filter for age -->
 			</tr>
 			<tr>
 				<td>Biography:</td>

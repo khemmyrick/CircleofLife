@@ -52,7 +52,6 @@ def pw_valid(pw):
 
 def bio_good(bio):
     """Validate bio is over 10 characters."""
-    bio = self.cleaned_data.get("bio")
     if len(bio) < 10:
         v_err('bio_short')
     if not re.search(r'[\S]+', bio):
@@ -64,9 +63,6 @@ class AccountCreationForm(UserCreationForm):
     """
     A modified UserCreationForm.
     """
-    bio = forms.CharField(label=("User Bio"),
-                          widget=forms.Textarea,
-                          validators=[bio_good])
     email2 = forms.CharField(label=_("Email confirmation"),
         widget=forms.EmailInput,
         help_text=_("To confirm: enter the same email as above."))        
@@ -80,9 +76,9 @@ class AccountCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        account = models.Account.objects.get(pk=model.pk) # This line is throwing an error.
+        # account = models.Account.objects.get(pk=model.pk) # This line was a mistake?
         fields = ("username", "email", "email2", "first_name", "last_name",
-                  "bio", "dob", "ava", "password1", "password2")
+                  "password1", "password2")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
@@ -126,9 +122,6 @@ class AccountEditForm(UserChangeForm):
     Extends UserChangeForm.
     NOTE: Does NOT extend my AccountCreationForm.
     """
-    bio = forms.CharField(label=("User Bio"),
-                          widget=forms.Textarea,
-                          validators=[bio_good])
     email = forms.CharField(label=_("Email"),
         widget=forms.EmailInput)
     email2 = forms.CharField(label=_("Email confirmation"),
@@ -191,22 +184,34 @@ class PasswordEditForm(PasswordChangeForm):
 
 
 class AccountExtrasCreationForm(forms.ModelForm):
-    pass
-#    """
-#    A form for adding the non-default attributes to a companion model for Django's User model.
     """
-    # bio = forms.CharField(label=("User Bio"),
-    #                      widget=forms.Textarea,
-    #                      validators=[bio_good])
+    A form for adding the non-default attributes to a companion model for Django's User model.
+    """
+    bio = forms.CharField(label=("User Bio"),
+                          widget=forms.Textarea,
+                          validators=[bio_good])
+    dob = forms.DateField(label=("Date of Birth"))
+    ava = forms.ImageField(label=("User Image"))
 
 
-    # class Meta:
-    #    model = models.Account
-    #    fields = ("bio", "dob", "ava")
+    class Meta:
+        model = models.Account
+        fields = ("bio", "dob", "ava")
 
-    # def save(self, commit=True):
-    #    account = super(UserCreationForm, self).save(commit=False)
-    #    account.bio = self.cleaned_data["bio"]
-    #    if commit:
-    #        user.save()
-    #    return user
+    def save(self, commit=True):
+        account = super(AccountExtrasCreationForm, self).save(commit=False)
+        account.bio = self.cleaned_data["bio"]
+        ## account.user = how do i target a user that isn't saved yet???
+        if commit:
+            account.save()
+        return account
+
+
+class AccountExtrasEditForm(forms.ModelForm):
+    bio = forms.CharField(label=("User Bio"),
+                          widget=forms.Textarea,
+                          validators=[bio_good])
+
+    class Meta:
+        model = models.Account
+        fields = ("bio", "dob", "ava")

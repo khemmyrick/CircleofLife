@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
-{% block title %}{{ account.username }} | {{ block.super }}{% endblock %}
+{% block title %}{{ account.user.username }} | {{ block.super }}{% endblock %}
 {% block body %}
 	<div>
-		<img src="{{ MEDIA_URL }}{{ account.avatar }}" alt="{{ account.username }}'s picture.">
+		<img src="{{ MEDIA_URL }}{{ account.ava }}" alt="{{ account.user.username }}'s picture.">
 		<ul>
-			<li>{{ account.username }}</li>
-			<li>{{ account.first_name }} {{ account.last_name }}</li>
-			<li><a href="{% url 'accounts:bio' pk=account.pk %}">Click for more information on {{ account.username }}.</a></li>
+			<li>{{ account.user.username }}</li>
+			<li>{{ account.user.first_name }} {{ account.user.last_name }}</li>
+			<li><a href="{% url 'accounts:bio' pk=account.pk %}">Click for more information on {{ account.user.username }}.</a></li>
 		</ul>
 		<!-- if block to authenticate this user as user in question -->
 		<a href="{% url 'accounts:edit' pk=account.pk %}">Edit your account.</a>

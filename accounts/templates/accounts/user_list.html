@@ -6,9 +6,9 @@
         {%  for account in accounts %}
             <div class="small-6 columns">
                 <div class="callout" align="center">
-                    <a href="{% url 'accounts:profile' pk=account.pk %}" class="button"><h5 align="center">{{ account.username }}</h5>
+                    <a href="{% url 'accounts:bio' pk=account.pk %}" class="button"><h5 align="center">{{ account.user.username }}</h5>
                     <div class="card-copy" style="text-align: center;">
-                        <img src="{{ MEDIA_URL }}/{{ account.avatar }}" alt="{{ account.username }}">
+                        <img src="{{ MEDIA_URL }}/{{ account.ava }}" alt="{{ account.user.username }}">
                     </div></a>
                 </div>
             </div>

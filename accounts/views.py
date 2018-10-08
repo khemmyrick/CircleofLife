@@ -39,10 +39,14 @@ def sign_in(request):
 
 def sign_up(request):
     form = forms.AccountCreationForm()
+    formplus = forms.AccountExtrasCreationForm()
     if request.method == 'POST':
         form = forms.AccountCreationForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
+        formplus = forms.AccountExtrasCreationForm(data=request.POST,
+                                                   files=request.FILES)
+        if form.is_valid() and formplus.is_valid():
             form.save()
+            formplus.save()
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1']
@@ -53,7 +57,8 @@ def sign_up(request):
                 "You're now a user! You've been signed in, too."
             )
             return HttpResponseRedirect(reverse('accounts:list'))  # TODO: go to profile?
-    return render(request, 'accounts/sign_up.html', {'form': form})
+    return render(request, 'accounts/sign_up.html', {'form': form,
+                                                     'formplus': formplus})
 
 
 @login_required
@@ -64,37 +69,43 @@ def sign_out(request):
 
 
 def profile(request, pk):
-    account = get_object_or_404(User, pk=pk)
+    account = get_object_or_404(Account, pk=pk)
     return render(request, 'accounts/user_profile.html', {
             'account': account,
         })
 
 
 def profile_bio(request, pk):
-    account = get_object_or_404(User, pk=pk)
+    account = get_object_or_404(Account, pk=pk)
     return render(request, 'accounts/user_bio.html', {
             'account': account
         })
 
 
 def profile_list(request):
-    # accounts = models.Account.objects.all()
-    accounts = User.objects.all()
+    # users = User.objects.all() ## User is an attribute of accounts.
+    accounts = models.Account.objects.all()
     return render(request, 'accounts/user_list.html', {'accounts': accounts})
 
 
 @login_required
 def profile_edit(request, pk):
-    account = get_object_or_404(User, pk=pk)
-    form = forms.AccountEditForm(instance=account)
+    user = get_object_or_404(User, pk=pk)
+    account = get_object_or_404(models.Account, pk=pk)
+    form = forms.AccountEditForm(instance=user)
+    formplus = forms.AccountExtrasCreationForm(instance=account)
 
     if request.method == 'POST':
-        form = forms.AccountEditForm(instance=account,
-                              data=request.POST,
-                              files=request.FILES)
+        form = forms.AccountEditForm(instance=user,
+                                     data=request.POST,
+                                     files=request.FILES)
+        formplus = forms.AccountExtrasCreationForm(instance=account,
+                                                   data=request.POST,
+                                                   files=request.FILES)
 
-        if form.is_valid():
+        if form.is_valid() and formplus.is_valid():
             user = form.save()
+            account = formplus.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request,
                              "Updated {}".format(
@@ -102,7 +113,7 @@ def profile_edit(request, pk):
             )
             return HttpResponseRedirect(reverse('accounts:list'))
     return render(request, 'accounts/user_form.html',
-                  {'form': form, 'account': account})
+                  {'form': form, 'user': user, 'account': account})
 
 
 @login_required
