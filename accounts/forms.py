@@ -202,6 +202,7 @@ class AccountExtrasCreationForm(forms.ModelForm):
         account = super(AccountExtrasCreationForm, self).save(commit=False)
         account.bio = self.cleaned_data["bio"]
         ## account.user = how do i target a user that isn't saved yet???
+        ## Can i handle this in views?
         if commit:
             account.save()
         return account

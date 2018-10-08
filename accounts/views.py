@@ -46,11 +46,12 @@ def sign_up(request):
                                                    files=request.FILES)
         if form.is_valid() and formplus.is_valid():
             form.save()
-            formplus.save()
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1']
             )
+            formplus.user = user
+            formplus.save()
             login(request, user)
             messages.success(
                 request,
