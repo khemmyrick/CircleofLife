@@ -188,3 +188,25 @@ class PasswordEditForm(PasswordChangeForm):
             v_err('password_mismatch')
         print('*** PASSWORD 2 CHECKED ***')
         return new_password2
+
+
+class AccountExtrasCreationForm(forms.ModelForm):
+    pass
+#    """
+#    A form for adding the non-default attributes to a companion model for Django's User model.
+    """
+    # bio = forms.CharField(label=("User Bio"),
+    #                      widget=forms.Textarea,
+    #                      validators=[bio_good])
+
+
+    # class Meta:
+    #    model = models.Account
+    #    fields = ("bio", "dob", "ava")
+
+    # def save(self, commit=True):
+    #    account = super(UserCreationForm, self).save(commit=False)
+    #    account.bio = self.cleaned_data["bio"]
+    #    if commit:
+    #        user.save()
+    #    return user
