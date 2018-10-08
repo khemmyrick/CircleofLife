@@ -22,6 +22,7 @@ def v_err(flaw):
         'password_mismatch': _("The two password fields didn't match."),
         'pw_short': _("Password must contain at least 14 characters."),
         'bio_short': _("Bio must contain at least 10 characters."),
+        'bio_empty':_("Bio must contain non-whitespace."),
         'password_incorrect': _("The password is incorrect."),
         'triplets': _("New password same as old password."),
         'email_mismatch': _("The two email fields didn't match."),
@@ -49,12 +50,23 @@ def pw_valid(pw):
         # Don't need return statement?
 
 
+def bio_good(bio):
+    """Validate bio is over 10 characters."""
+    bio = self.cleaned_data.get("bio")
+    if len(bio) < 10:
+        v_err('bio_short')
+    if not re.search(r'[\S]+', bio):
+        v_err('bio_empty')
+    # No need to return bio
+
+
 class AccountCreationForm(UserCreationForm):
     """
     A modified UserCreationForm.
     """
-    # bio = forms.CharField(label=("User Bio"),
-    #    widget=forms.Textarea)
+    bio = forms.CharField(label=("User Bio"),
+                          widget=forms.Textarea,
+                          validators=[bio_good])
     email2 = forms.CharField(label=_("Email confirmation"),
         widget=forms.EmailInput,
         help_text=_("To confirm: enter the same email as above."))        
@@ -68,8 +80,9 @@ class AccountCreationForm(UserCreationForm):
 
     class Meta:
         model = User
+        account = models.Account.objects.get(pk=model.pk) # This line is throwing an error.
         fields = ("username", "email", "email2", "first_name", "last_name",
-                  "password1", "password2")
+                  "bio", "dob", "ava", "password1", "password2")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
@@ -96,16 +109,7 @@ class AccountCreationForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             v_err('password_mismatch')
         return password2
-        
-    # def clean_bio(self):
-    #    """Get other stuff working before adding bio/ava/dob."""
-    #    bio = self.cleaned_data.get("bio")
-    #    if len(bio) < 10:
-    #        raise forms.ValidationError(
-    #            self.error_messages['bio_short'],
-    #            code='bio_short',
-    #        )
-    #    return bio
+
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
@@ -122,15 +126,14 @@ class AccountEditForm(UserChangeForm):
     Extends UserChangeForm.
     NOTE: Does NOT extend my AccountCreationForm.
     """
-    # bio = forms.CharField(label=("User Bio"),
-    #    widget=forms.Textarea)
+    bio = forms.CharField(label=("User Bio"),
+                          widget=forms.Textarea,
+                          validators=[bio_good])
     email = forms.CharField(label=_("Email"),
         widget=forms.EmailInput)
     email2 = forms.CharField(label=_("Email confirmation"),
         widget=forms.EmailInput,
         help_text=_("To confirm: enter the same email as above."))        
-    # password = forms.CharField(label=_("Password"),
-    #    widget=forms.PasswordInput)  ## Below is the logic from UCF.
     password = ReadOnlyPasswordHashField(label=_("Password"),
         help_text=_("Raw passwords are not stored, so there is no way to see "
                     "this user's password."))
@@ -153,15 +156,6 @@ class AccountEditForm(UserChangeForm):
             v_err('email_mismatch')
         print('*** EMAIL 2 CHECKED ***')
         return email2
-
-    # def clean_bio(self):
-    #    bio = self.cleaned_data.get("bio")
-    #    if len(bio) < 10:
-    #        raise forms.ValidationError(
-    #            self.error_messages['bio_short'],
-    #            code='bio_short',
-    #        )
-    #    return bio
 
     def clean_password(self):
         password = self.cleaned_data.get("password")
