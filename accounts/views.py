@@ -53,17 +53,17 @@ def sign_up(request):
                 request,
                 "Almost there! Just a few more steps to finish registering."
             )
-            return sign_up_account(request, user.pk)  # Go to profile registration!
+            return HttpResponseRedirect(reverse('accounts:register'))
+            # return sign_up_account(request, user.pk)  # Go to profile registration!
     return render(request, 'accounts/sign_up.html', {'form': form})
 
 
-def sign_up_account(request, pk):
+def sign_up_account(request):
     """Register details of profile."""
     form = forms.AccountExtrasCreationForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and user.is_auhthenticated():
         form = forms.AccountExtrasCreationForm(data=request.POST,
                                                files=request.FILES)
-        user = get_object_or_404(User, pk=pk)
         if form.is_valid():
             # form.user = user
             form.save(user)
@@ -77,7 +77,7 @@ def sign_up_account(request, pk):
                 "You're now a user! You've been signed in, too."
             )
             return HttpResponseRedirect(reverse('accounts:list'))  # Go to user profile.
-    return render(request, 'accounts/sign_up.html', {'form': form})
+    return render(request, 'accounts/sign_up_account.html', {'form': form})
 
 
 @login_required

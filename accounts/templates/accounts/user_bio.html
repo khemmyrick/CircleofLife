@@ -27,8 +27,9 @@
 				<td>{{ account.bio }}</td>
 			</tr>
 		</table>
-		<!-- if block to authenticate this user as user in question -->
+		{% if user.is_authenticated %}
 		<h3><a href="{% url 'accounts:edit' pk=account.pk %}" class="button" align="center">Edit your account.</a></h3>
+		{% endif %}
 		<!-- Create a “profile” view to display a user profile with the following fields: First Name, Last Name, Email, Date of Birth, Bio and Avatar. Include a link to edit the profile. -->
 	</div>
 
