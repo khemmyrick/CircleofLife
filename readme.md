@@ -8,6 +8,10 @@
 
 # Next Steps:
 1. Outline of new strategy/questions:
+	- NOTE TO SELF VERY NEXT STEP:
+		Make Sign Up Account template that loads directly after sign up user template.
+		Sign Up Account template uses the model generated in the sign up user template to have a user attribute.
+		I think this project will be near finished once this step is completed! [ ]
 	- User model exists by default, use it. [X]
 	- Account model related to User model will hold additional attributes. []?????
 	- Each form will need to incorporate both models?  Is that a thing?  []?????
