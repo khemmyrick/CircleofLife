@@ -38,28 +38,46 @@ def sign_in(request):
 
 
 def sign_up(request):
+    """Register basic user profile."""
     form = forms.AccountCreationForm()
-    formplus = forms.AccountExtrasCreationForm()
     if request.method == 'POST':
         form = forms.AccountCreationForm(data=request.POST, files=request.FILES)
-        formplus = forms.AccountExtrasCreationForm(data=request.POST,
-                                                   files=request.FILES)
-        if form.is_valid() and formplus.is_valid():
+        if form.is_valid():
             form.save()
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1']
             )
-            formplus.user = user
-            formplus.save()
             login(request, user)
+            messages.success(
+                request,
+                "Almost there! Just a few more steps to finish registering."
+            )
+            return sign_up_account(request, user.pk)  # Go to profile registration!
+    return render(request, 'accounts/sign_up.html', {'form': form})
+
+
+def sign_up_account(request, pk):
+    """Register details of profile."""
+    form = forms.AccountExtrasCreationForm()
+    if request.method == 'POST':
+        form = forms.AccountExtrasCreationForm(data=request.POST,
+                                               files=request.FILES)
+        form.user = get_object_or_404(User, pk=pk)
+        if form.is_valid():
+            # form.user = user
+            form.save()
+            # user = authenticate(
+            #    username=form.cleaned_data['username'],
+            #    password=form.cleaned_data['password1']
+            # )
+            # login(request, user)
             messages.success(
                 request,
                 "You're now a user! You've been signed in, too."
             )
-            return HttpResponseRedirect(reverse('accounts:list'))  # TODO: go to profile?
-    return render(request, 'accounts/sign_up.html', {'form': form,
-                                                     'formplus': formplus})
+            return HttpResponseRedirect(reverse('accounts:list'))  # Go to user profile.
+    return render(request, 'accounts/sign_up.html', {'form': form})
 
 
 @login_required

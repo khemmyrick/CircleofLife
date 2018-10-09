@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Edit {{ account.username }} | {{ super }}{% endblock %}
+{% block title %}Edit {{ account.user.username }} | {{ super }}{% endblock %}
 
 {% block body %}
 <form method="POST" action="{% url 'accounts:edit' pk=account.pk %}" enctype="multipart/form-data">

@@ -4,6 +4,7 @@
 1. User model forms updated.
 	- Account creation, edit and password change forms interact correctly with password attributes.
 	- Creation and edit forms validate email attributes.
+	- User and Account models ALMOST populate correctly as sign up template is now run twice, once per model.
 
 
 # Next Steps:
