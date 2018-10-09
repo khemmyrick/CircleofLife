@@ -198,10 +198,10 @@ class AccountExtrasCreationForm(forms.ModelForm):
         model = models.Account
         fields = ("bio", "dob", "ava")
 
-    def save(self, commit=True):
+    def save(self, user, commit=True):
         account = super(AccountExtrasCreationForm, self).save(commit=False)
         account.bio = self.cleaned_data["bio"]
-        ## account.user = how do i target a user that isn't saved yet???
+        account.user = user
         ## Can i handle this in views?
         if commit:
             account.save()

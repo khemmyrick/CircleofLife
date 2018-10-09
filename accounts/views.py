@@ -63,10 +63,10 @@ def sign_up_account(request, pk):
     if request.method == 'POST':
         form = forms.AccountExtrasCreationForm(data=request.POST,
                                                files=request.FILES)
-        form.user = get_object_or_404(User, pk=pk)
+        user = get_object_or_404(User, pk=pk)
         if form.is_valid():
             # form.user = user
-            form.save()
+            form.save(user)
             # user = authenticate(
             #    username=form.cleaned_data['username'],
             #    password=form.cleaned_data['password1']
