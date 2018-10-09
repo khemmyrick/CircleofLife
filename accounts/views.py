@@ -39,6 +39,7 @@ def sign_in(request):
 
 def sign_up(request):
     """Register basic user profile."""
+    print("*** SIGN UP VIEW ***")
     form = forms.AccountCreationForm()
     if request.method == 'POST':
         form = forms.AccountCreationForm(data=request.POST, files=request.FILES)
@@ -53,13 +54,14 @@ def sign_up(request):
                 request,
                 "Almost there! Just a few more steps to finish registering."
             )
-            return HttpResponseRedirect(reverse('accounts:register'))
+            return HttpResponseRedirect(reverse('accounts:clickthrough'))
             # return sign_up_account(request, user.pk)  # Go to profile registration!
     return render(request, 'accounts/sign_up.html', {'form': form})
 
 
 def sign_up_account(request):
     """Register details of profile."""
+    print("*** REGISTER VIEW ***")
     form = forms.AccountExtrasCreationForm()
     if request.method == 'POST' and user.is_auhthenticated():
         form = forms.AccountExtrasCreationForm(data=request.POST,
@@ -76,7 +78,7 @@ def sign_up_account(request):
                 request,
                 "You're now a user! You've been signed in, too."
             )
-            return HttpResponseRedirect(reverse('accounts:list'))  # Go to user profile.
+            return HttpResponseRedirect(reverse('home'))  # Go to user profile.
     return render(request, 'accounts/sign_up_account.html', {'form': form})
 
 
@@ -99,6 +101,12 @@ def profile_bio(request, pk):
     return render(request, 'accounts/user_bio.html', {
             'account': account
         })
+
+
+def clickthrough(request):
+    print("**** CLICKTHROUGH VIEW only calls template with a button"
+          "for the express purpose of escaping SIGN_UP VIEW ****")
+    return render(request, 'accounts/clickthrough.html')
 
 
 def profile_list(request):

@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'sign_in/$', views.sign_in, name='sign_in'),
     url(r'login/$', views.sign_in, name='login'),
+    url(r'clickthrough/$', views.clickthrough, name='clickthrough'),
     url(r'sign_up/$', views.sign_up, name='sign_up'),
     url(r'sign_up_account/$', views.sign_up_account, name='register'),
     url(r'sign_out/$', views.sign_out, name='sign_out'),
