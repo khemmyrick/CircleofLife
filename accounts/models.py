@@ -11,15 +11,12 @@ class Account(models.Model):
     bio = models.TextField()
     ava = models.ImageField(blank=True, null=True,
                             upload_to=user_directory_path)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Does the Django docs example link MySpecialUser to two different models,
-    # Or is the user attribute supposed to represent the MySpecialUser instance itself?
-    # AUTH_USER_MODEL is for replacing User model. Shouldn't need it here.
-    # account = models.OneToOneField(
-    #    on_delete=models.CASCADE,
-    # )
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='classic_user',
     )
+    
+    def __str__(self):
+        '''Display account objects as usernames in admin.'''
+        return self.user.username

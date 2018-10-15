@@ -4,6 +4,8 @@
 
 {% block body %}
 	{% if user.is_authenticated %}
-		<a href="{% url 'accounts:register' pk=user.pk %}" class="button">Finish Registering</a>
+		<div class="card-copy" style="text-align: center;">
+			<a href="{% url 'accounts:register' %}" class="button" text-align="center">Finish Registering {{ user.name }}?</a>
+		</div>
 	{% endif %}
 {% endblock %}

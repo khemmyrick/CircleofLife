@@ -3,7 +3,7 @@
 {% block title %}Edit {{ account.user.username }} | {{ super }}{% endblock %}
 
 {% block body %}
-<form method="POST" action="{% url 'accounts:edit' pk=account.pk %}" enctype="multipart/form-data">
+<form method="POST" action="{% url 'accounts:edit' pk=account.user.pk %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 	{{ formplus.as_p }}

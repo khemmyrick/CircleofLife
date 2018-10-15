@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load humanize %}
 
 {% block title %}{{ account.user.username }} | {{ block.super }}{% endblock %}
 {% block body %}
@@ -16,11 +16,7 @@
 			</tr>
 			<tr>
 				<td>Birthday:</td>
-				<td>{{ account.dob }}</td><!-- use filter -->
-			</tr>
-			<tr>
-				<td>Age:</td>
-				<td>{{ account.dob }}</td><!-- use filter for age -->
+				<td>{{ account.dob }}</td>
 			</tr>
 			<tr>
 				<td>Biography:</td>
@@ -28,9 +24,10 @@
 			</tr>
 		</table>
 		{% if user.is_authenticated %}
-		<h3><a href="{% url 'accounts:edit' pk=account.pk %}" class="button" align="center">Edit your account.</a></h3>
+			{% if user.pk == account.user.pk %}
+				<h3><a href="{% url 'accounts:edit' pk=account.user.pk %}" class="button" align="center">Edit your account.</a></h3>
+			{% endif %}
 		{% endif %}
-		<!-- Create a “profile” view to display a user profile with the following fields: First Name, Last Name, Email, Date of Birth, Bio and Avatar. Include a link to edit the profile. -->
 	</div>
 
 {% endblock %}

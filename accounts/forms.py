@@ -193,15 +193,18 @@ class AccountExtrasCreationForm(forms.ModelForm):
     dob = forms.DateField(label=("Date of Birth"))
     ava = forms.ImageField(label=("User Image"))
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(AccountExtrasCreationForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = models.Account
         fields = ("bio", "dob", "ava")
 
-    def save(self, user, commit=True):
+    def save(self, commit=True):
         account = super(AccountExtrasCreationForm, self).save(commit=False)
         account.bio = self.cleaned_data["bio"]
-        account.user = user
+        account.user = self.user
         ## Can i handle this in views?
         if commit:
             account.save()
@@ -212,7 +215,21 @@ class AccountExtrasEditForm(forms.ModelForm):
     bio = forms.CharField(label=("User Bio"),
                           widget=forms.Textarea,
                           validators=[bio_good])
+    ava = forms.ImageField(label=("User Image"))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(AccountExtrasEditForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = models.Account
         fields = ("bio", "dob", "ava")
+
+    def save(self, commit=True):
+        account = super(AccountExtrasEditForm, self).save(commit=False)
+        account.bio = self.cleaned_data["bio"]
+        account.user = self.user
+        ## Can i handle this in views?
+        if commit:
+            account.save()
+        return account
