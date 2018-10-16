@@ -55,7 +55,6 @@ def sign_up(request):
                 "Almost there! Just a few more steps to finish registering."
             )
             return HttpResponseRedirect(reverse('accounts:clickthrough'))
-            # return sign_up_account(request, user.pk)  # Go to profile registration!
     return render(request, 'accounts/sign_up.html', {'form': form})
 
 
@@ -69,25 +68,15 @@ def sign_up_account(request):
                                                files=request.FILES,
                                                user=request.user)
         if form.is_valid():
-            # users = User.objects.all()
-            # for item in users:
-            #    if item.pk == pk:
-            #        user = item
             print('**** FORM IS VALID ****')
-            # form.user = user
             form.save()
             print('** CALL "save" ON FORM **')
-            # user = authenticate(
-            #    username=form.cleaned_data['username'],
-            #    password=form.cleaned_data['password1']
-            # )
-            # login(request, user)
             messages.success(
                 request,
                 "You're now a user! You've been signed in, too."
             )
             print("**** LOADED SUCCESS MESSAGE ****")
-            return HttpResponseRedirect(reverse('home'))  # Go to user profile.
+            return HttpResponseRedirect(reverse('home'))
     print('** THIS SHOULD LOAD / RELOAD THE REGISTER VIEW **')
     return render(request, 'accounts/sign_up_account.html', {'form': form})
 
@@ -120,7 +109,6 @@ def clickthrough(request):
 
 
 def profile_list(request):
-    # users = User.objects.all() ## User is an attribute of accounts.
     accounts = models.Account.objects.all()
     return render(request, 'accounts/user_list.html', {'accounts': accounts})
 
@@ -176,7 +164,7 @@ def pw_edit(request, pk):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-        # IDK what this is doing or why it wants the default form???
+        # IDK what this is doing or why it wants the default form?
     return render(request, 'accounts/new_password.html', {
         'form': form
     })

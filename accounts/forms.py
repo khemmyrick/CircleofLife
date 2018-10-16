@@ -76,7 +76,6 @@ class AccountCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        # account = models.Account.objects.get(pk=model.pk) # This line was a mistake?
         fields = ("username", "email", "email2", "first_name", "last_name",
                   "password1", "password2")
 
@@ -93,11 +92,6 @@ class AccountCreationForm(UserCreationForm):
             v_err('email_mismatch')
         print('*** EMAIL 2 CHECKED ***')
         return email2
-
-    # def clean_password1(self):
-    #    password1 = self.cleaned_data.get("password1")
-    #    pw_valid(password1)
-    #    return password1   ## Don't need clean_password1 because pw1 is validated already above.
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -185,7 +179,7 @@ class PasswordEditForm(PasswordChangeForm):
 
 class AccountExtrasCreationForm(forms.ModelForm):
     """
-    A form for adding the non-default attributes to a companion model for Django's User model.
+    A form for adding attributes to a companion model for Django's User model.
     """
     bio = forms.CharField(label=("User Bio"),
                           widget=forms.Textarea,
