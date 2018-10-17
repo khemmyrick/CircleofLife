@@ -13,6 +13,4 @@
 
 
 # Next Steps:
-1. Send to Review My Project.
-2. ???
-3. PROFIT!
+1. Submit project.
